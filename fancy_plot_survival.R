@@ -29,7 +29,7 @@ plot.survival.fancy=function(s, conf.int=F, auto.scale=F, xmax=0, marker=c("poin
 	if(xmax) s.plot=subset(s.plot, time< xmax)
 	if( max (is.na(s.plot$group)) )
 	{	s.plot=s.plot[order(s.plot$time), ];
-		q=qplot(time, surv, data= subset(s.plot, evnt==0 & time>0), geom=marker,...)
+		q=qplot(time, surv, data= subset(s.plot, evnt==0 & time>0), geom="blank",...)
 		if(!is.null(xlim)) q=q+ coord_cartesian(xlim = xlim)
 		if(auto.scale)
 			if(conf.int)
@@ -73,7 +73,7 @@ plot.survival.fancy=function(s, conf.int=F, auto.scale=F, xmax=0, marker=c("poin
 		s.plot=s.plot[order(s.plot$group,s.plot$time), ];
 
 		if(length(stratavec))
-			 q=qplot(time, surv, data= subset(s.plot, evnt==0&time>0), geom=marker, colour=group, facets= stratum ~., ...)
+			 q=qplot(time, surv, data= subset(s.plot, evnt==0&time>0), geom="blank", colour=group, facets= stratum ~., ...)
 		else
 		{   my.df= subset(s.plot, evnt==0&time>0)
 			my.geom= marker
@@ -82,17 +82,19 @@ plot.survival.fancy=function(s, conf.int=F, auto.scale=F, xmax=0, marker=c("poin
 				my.df=s.plot
 				my.geom="blank"
 			}
-			q=qplot(time, surv, data= my.df, geom= my.geom, colour=group, ...)
+			q=qplot(time, surv, data= my.df, geom= "blank", colour=group, ...)
 		}
 		if(!is.null(xlim)) q=q+ coord_cartesian(xlim = xlim)
 		if(auto.scale)
-			if(conf.int)
+			if(conf.int) {
 				return(q+
 				geom_step(data=s.plot,   aes(x=time, y=surv, group=group, colour=group), size=1.2)+scale_colour_brewer(palette = 3)+
-				geom_ribbon(data=s.plot, aes(x=time, min=min, max=max, fill=group), size=0, alpha=0.3)+ scale_fill_brewer(palette = 3))
+				  geom_point(shape=3, size=5,colour="black")+
+				geom_ribbon(data=s.plot, aes(x=time, min=min, max=max, fill=group), size=0.25, alpha=0.2,linetype="dashed")+ scale_fill_brewer(palette = 3)) }
 			else
 			{	return(q+
-				geom_step(data=s.plot,   aes(x=time, y=surv, group=group, colour=group), size=1.2))
+				geom_step(data=s.plot,   aes(x=time, y=surv, group=group, colour=group), size=1.2))+scale_colour_brewer(palette = 3)+
+				  geom_point(data=s.plot,aes(x=time,y=surv),shape=3, size=5,colour="black")
 			}
 		else
 			if(conf.int)

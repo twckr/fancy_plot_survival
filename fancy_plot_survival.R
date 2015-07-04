@@ -88,7 +88,7 @@ plot.survival.fancy=function(s, conf.int=F, auto.scale=F, xmax=0, marker=c("poin
 		if(auto.scale)
 			if(conf.int) {
 				return(q+
-				geom_step(data=s.plot,   aes(x=time, y=surv, group=group, colour=group), size=1.2)+scale_colour_brewer(palette = 3)+
+				geom_step(data=s.plot,   aes(x=time, y=surv, group=group, colour=group), size=1.2)+scale_colour_brewer(palette = 3)+scale_y_continuous(limits=c(-0.05,1.1),breaks=c(0,0.2,0.4,0.6,0.8,1.0))+
 				  geom_point(shape=3, size=5,colour="black")+
 				geom_ribbon(data=s.plot, aes(x=time, min=min, max=max, fill=group), size=0.25, alpha=0.2,linetype="dashed")+ scale_fill_brewer(palette = 3)) }
 			else
